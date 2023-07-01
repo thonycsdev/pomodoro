@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Button from "../button";
 import useClock from "@/hooks/useClock/useClock";
 
