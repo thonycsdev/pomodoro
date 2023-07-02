@@ -4,12 +4,19 @@ import useClock from "@/hooks/useClock/useClock";
 import formatTimer from "@/functions/formatTime";
 
 function Clock() {
-  const { hours, minutes, seconds, finishTimer, startTimer, stopTimer } =
-    useClock();
+  const {
+    hour,
+    minute,
+    second,
+    finishTimer,
+    startBreak,
+    startTimer,
+    stopTimer,
+  } = useClock();
 
-  const timeformatted = `${formatTimer(hours)} : ${formatTimer(
-    minutes
-  )} : ${formatTimer(seconds)}`;
+  const timeformatted = `${formatTimer(hour)} : ${formatTimer(
+    minute
+  )} : ${formatTimer(second)}`;
 
   return (
     <>
@@ -18,6 +25,7 @@ function Clock() {
         <Button onClick={startTimer}>Start</Button>
         <Button onClick={stopTimer}>Stop</Button>
         <Button onClick={finishTimer}>Reset</Button>
+        <Button onClick={startBreak}>Rest</Button>
       </div>
     </>
   );

@@ -1,65 +1,47 @@
-import React, { useEffect, useState } from "react";
+import formatNumbers from "@/functions/formatNumbers";
+import { useEffect, useState } from "react";
+
+const MINUTES_TO_WAIT = 25 * 60;
+const REST_TIME = 5 * 60;
 
 function useClock() {
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(25);
-  const [seconds, setSeconds] = useState(0);
+  const [totalSeconds, setTotalSeconds] = useState(MINUTES_TO_WAIT);
   const [isRunning, setIsRunning] = useState(false);
+
+  const { hours, minutes, seconds } = formatNumbers(totalSeconds);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (isRunning && totalSeconds > 0) {
+      timer = setInterval(() => {
+        setTotalSeconds((prevSeconds) => prevSeconds - 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(timer);
+  }, [isRunning, totalSeconds]);
 
   const clockFunctions = {
     startTimer: () => {
       setIsRunning(true);
     },
     finishTimer: () => {
-      setHours(0);
-      setMinutes(25);
-      setSeconds(0);
       setIsRunning(false);
-    },
-    subtrackMinute: () => {
-      setSeconds(59);
-      setMinutes((prevMinutes) => prevMinutes - 1);
-    },
-    subtrackHours: () => {
-      setMinutes(0);
-      setHours((prevHours) => prevHours - 1);
+      setTotalSeconds(MINUTES_TO_WAIT);
     },
     stopTimer: () => {
       setIsRunning(false);
     },
-
-    hours,
-    minutes,
-    seconds,
-    isRunning,
-  };
-
-  useEffect(() => {
-    if (seconds === 0 && minutes === 0 && hours == 0) {
+    startBreak: () => {
       setIsRunning(false);
-      return;
-    }
-    if (seconds === 0 && isRunning) {
-      return;
-    }
-    if (seconds < 0 && isRunning == true) {
-      setSeconds(59);
-      setMinutes((prevMinutes) => prevMinutes - 1);
-    }
-    if (minutes === 60) {
-      setMinutes(0);
-      setHours((prevHours) => prevHours - 1);
-    }
-  }, [seconds, minutes, hours, isRunning]);
-
-  useEffect(() => {
-    if (isRunning) {
-      const timer = setInterval(() => {
-        setSeconds((val) => (val -= 1));
-      }, 1000);
-      return () => clearInterval(timer);
-    }
-  }, [isRunning]);
+      setTotalSeconds(REST_TIME);
+    },
+    isRunning,
+    hour: hours,
+    minute: minutes,
+    second: seconds,
+  };
 
   return clockFunctions;
 }
