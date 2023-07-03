@@ -20,8 +20,8 @@ function Clock() {
 
   return (
     <>
-      <div className="p-28 text-5xl">{timeformatted}</div>
-      <div className="flex justify-center gap-32 pt-14">
+      <div className="py-10 text-5xl">{timeformatted}</div>
+      <div className="flex flex-col justify-center items-center gap-4 w-full sm:flex-row">
         <Button onClick={startTimer}>Start</Button>
         <Button onClick={stopTimer}>Stop</Button>
         <Button onClick={finishTimer}>Reset</Button>
